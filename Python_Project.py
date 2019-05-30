@@ -3,34 +3,47 @@ import time
 import urllib.request
 import xml.etree.ElementTree as et
 
-pth = 'C:\\Users\\Greg\\Documents\\python_project\\'
+#pth = 'D:\\Python_Project\\'
+pth = './'
 
-os.remove(pth+'F-D0047-093.zip')
+#os.remove(pth+'F-D0047-093.zip')
 #os.path.exists(pth+'F-D0047-093.zip')
-
+print('鄉鎮天氣預報-全臺灣各鄉鎮市區預報資料')
+print('更新資料中...')
 url ="http://opendata.cwb.gov.tw/govdownload?dataid=F-D0047-093&authorizationkey=rdec-key-123-45678-011121314"
 urllib.request.urlretrieve(url,pth+'F-D0047-093.zip')
 
 if os.path.exists(pth+'F-D0047-093.zip'):
     tt= os.path.getmtime(pth+'F-D0047-093.zip')
-    print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(tt)))
+    print('資料時間:',time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(tt)))
 else:
     print('file not exist')
 
 import zipfile
 f=zipfile.ZipFile(pth+'F-D0047-093.zip')
-#台北 
-for filename in [ '63_72hr_CH.xml']:
-#高雄 
-# for filename in [ '64_72hr_CH.xml']:
-#新北 
-# for filename in [ '65_72hr_CH.xml']:
-#台中 
-# for filename in [ '66_72hr_CH.xml']:
-#台南 
-# for filename in [ '67_72hr_CH.xml']:
-#桃園 
-# for filename in [ '68_72hr_CH.xml']:
+
+# 1.台北市  2.高雄市  3.新北市  4.台中市  5.台南市  6.桃園市
+# 7.宜蘭縣  8.新竹縣  9.苗栗縣 10.彰化縣 11.南投縣 12.雲林縣
+#13.嘉義縣 14.屏東縣 15.臺東縣 16.花蓮縣 17.澎湖縣 18.基隆市
+#19.新竹市 20.嘉義市 21.連江縣 22.金門縣
+ 
+xml={'1':'63_72hr_CH.xml','2':'64_72hr_CH.xml','3':'65_72hr_CH.xml','4':'66_72hr_CH.xml','5':'67_72hr_CH.xml','6':'68_72hr_CH.xml','7':'10002_72hr_CH.xml','8':'10004_72hr_CH.xml','9':'10005_72hr_CH.xml','10':'10007_72hr_CH.xml','11':'10008_72hr_CH.xml','12':'10009_72hr_CH.xml','13':'10010_72hr_CH.xml','14':'10013_72hr_CH.xml','15':'10014_72hr_CH.xml','16':'10015_72hr_CH.xml','17':'10016_72hr_CH.xml','18':'10017_72hr_CH.xml','19':'10018_72hr_CH.xml','20':'10020_72hr_CH.xml','21':'09007_72hr_CH.xml','22':'09020_72hr_CH.xml'}
+
+cityname={'1':'台北市','2':'高雄市','3':'新北市','4':'台中市','5':'台南市','6':'桃園市','7':'宜蘭縣','8':'新竹縣','9':'苗栗縣','10':'彰化縣','11':'南投縣','12':'雲林縣','13':'嘉義縣','14':'屏東縣','15':'臺東縣','16':'花蓮縣','17':'澎湖縣','18':'基隆市','19':'新竹市','20':'嘉義市','21':'連江縣','22':'金門縣'}
+
+
+print('請選擇地區: ')
+print(' 1.台北市  2.高雄市  3.新北市  4.台中市  5.台南市  6.桃園市')
+print(' 7.宜蘭縣  8.新竹縣  9.苗栗縣 10.彰化縣 11.南投縣 12.雲林縣')
+print('13.嘉義縣 14.屏東縣 15.臺東縣 16.花蓮縣 17.澎湖縣 18.基隆市')
+print('19.新竹市 20.嘉義市 21.連江縣 22.金門縣')
+
+myCity = input()
+
+#print('Loading:',cityname[myCity],xml[myCity])
+print(cityname[myCity],'各區域天氣預報如下：')
+
+for filename in [xml[myCity]]:
     try:
         report = f.read(filename)
     except:
@@ -45,11 +58,10 @@ locations_info = locations.findall(xml_namespace + 'location')
 
 target_idx = -1
 for idx,ele in enumerate(locations_info):
-    locationName = ele[0].text # 取得縣市名
-#    if locationName == location:
+    locationName = ele[0].text # 取得區名
     target_idx = idx
 
-    # 挑選出目前想要 location 的氣象資料
+    # 挑選出目前 location 的氣象資料
     weather_element = locations_info[target_idx][-1] # 取出 Wx (氣象描述)
     block_of_current_time = weather_element[2] # 取出目前時間點的資料
 
