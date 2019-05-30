@@ -38,7 +38,16 @@ print(' 7.宜蘭縣  8.新竹縣  9.苗栗縣 10.彰化縣 11.南投縣 12.雲�
 print('13.嘉義縣 14.屏東縣 15.臺東縣 16.花蓮縣 17.澎湖縣 18.基隆市')
 print('19.新竹市 20.嘉義市 21.連江縣 22.金門縣')
 
-myCity = input()
+while True:
+	try:
+		myCity = input()
+		if eval(myCity) in range(1,22+1):
+			break
+		else:
+			print('請輸入 1~22 的數字')
+	except:
+		print('請輸入 1~22 的數字')
+	
 
 #print('Loading:',cityname[myCity],xml[myCity])
 print(cityname[myCity],'各區域天氣預報如下：')
